@@ -426,12 +426,15 @@ class Cellar extends Card {
   async play(player, game) {
     await super.play(player, game);
 
+    // +1 Action.
+    // Discard any number of cards. +1 Card per card discarded.
+
     player._actions += 1;
     let choices = player._hand;
     let choice = await game.choose(player, choices, 0);
 
     for (let card of choice) {
-      player._hand = player._hand.filter( card => card != this);
+      player._hand = player._hand.filter(c => c != card);
       player._discard.push(card);
     }
 

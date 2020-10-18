@@ -61,6 +61,29 @@ describe("Buy stage", function() {
   });
 });
 
+describe("Cellar", function() {
+  it("Play Cellar", async () => {
+    seedrandom('hello.', { global: true });
+    let g = await simpleGame2Players();
+    let p = g._players[0];
+    g._activePlayer = p;
+    let card = new Cards.Cellar();
+    p._hand.push(card);
+    Assert.equal(p._hand.length, 6);
+    Assert.equal(p._deck.length, 5);
+
+    let play = card.play(p, g);
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await g.decideOption([0, 1, 2, 3, 4]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    await play;
+
+    Assert.equal(p._hand.length, 5);
+    Assert.equal(p._deck.length, 0);
+  });
+});
 
 describe("Gardens", function() {
   it("Count gardens VP", async () => {
