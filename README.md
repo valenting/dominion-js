@@ -34,3 +34,5 @@ where `0` is the index of the user's choice in the list.
 - [ ] Implement UI
 - [ ] Add webrtc code to allow playing with remote users
 - [ ] More dominion cards
+- [ ] Write unit tests for every card
+- [ ] Fuzzing
