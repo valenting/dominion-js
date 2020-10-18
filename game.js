@@ -573,7 +573,7 @@ class Workshop extends Card {
     await super.play(player, game);
 
     // Gain a card costing up to $4.
-    let [cardName] = await game.choose(player, game.cardsCostingAtMost(4), 1,1);
+    let [cardName] = await game.choose(player, await game.cardsCostingAtMost(4), 1,1);
     let card = this._supply[cardName].shift();
     player._discard.push(card);
   }
