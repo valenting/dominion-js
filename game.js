@@ -1032,7 +1032,7 @@ Artisan.prototype._cost = 6;
 
 // Removed cards
 
-class Cancellor extends Card {
+class Chancellor extends Card {
   async play(player, game) {
     await super.play(player, game);
 
@@ -1050,9 +1050,9 @@ class Cancellor extends Card {
   }
 }
 
-Cancellor.prototype._value = 0;
-Cancellor.prototype._type = ["action"];
-Cancellor.prototype._cost = 3;
+Chancellor.prototype._value = 0;
+Chancellor.prototype._type = ["action"];
+Chancellor.prototype._cost = 3;
 
 
 class Woodcutter extends Card {
@@ -1233,7 +1233,7 @@ module.exports.Cards = {
   Artisan,
 
   // Removed
-  Cancellor,
+  Chancellor,
   Woodcutter,
   Feast,
   Spy,
