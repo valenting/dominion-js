@@ -85,6 +85,31 @@ describe("Cellar", function() {
   });
 });
 
+
+describe("Chapel", function() {
+  it("Play Chapel", async () => {
+    seedrandom('hello.', { global: true });
+    let g = await simpleGame2Players();
+    let p = g._players[0];
+    g._activePlayer = p;
+    let card = new Cards.Chapel();
+
+    p._hand.push(card);
+    Assert.equal(p._hand.length, 6);
+    Assert.equal(p._deck.length, 5);
+
+    let play = card.play(p, g);
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await g.decideOption([0, 1]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    await play;
+    Assert.equal(p._hand.length, 3);
+    Assert.equal(g._trash.length, 2);
+  });
+});
+
 describe("Gardens", function() {
   it("Count gardens VP", async () => {
     seedrandom('hello.', { global: true });

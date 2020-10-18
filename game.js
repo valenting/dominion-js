@@ -17,6 +17,14 @@ Array.prototype.shuffle = function() {
   }
 }
 
+function generateN(cardType, count) {
+  let array = [];
+  while (count--) {
+    array.push(new cardType());
+  }
+  return array;
+}
+
 Array.prototype.pretty = function() {
   let text = "";
   if (this.length > 0 && typeof this[0].cost === "function") {
@@ -118,15 +126,15 @@ class Game {
       throw "Not enough players";
     }
     let victoryCount = this._players.length > 2 ? 12 : 8;
-    this._supply["Estate"] = Array(victoryCount).fill(new Estate());
-    this._supply["Duchy"] = Array(victoryCount).fill(new Duchy());
-    this._supply["Province"] = Array(victoryCount).fill(new Province());
+    this._supply["Estate"] = generateN(Estate, victoryCount);
+    this._supply["Duchy"] = generateN(Duchy, victoryCount);
+    this._supply["Province"] = generateN(Province, victoryCount);
 
-    this._supply["Copper"] = Array(60 - this._players.length*7).fill(new Copper());
-    this._supply["Silver"] = Array(40).fill(new Silver());
-    this._supply["Gold"] = Array(30).fill(new Gold());
+    this._supply["Copper"] = generateN(Copper, 60 - this._players.length*7);
+    this._supply["Silver"] = generateN(Silver, 40);
+    this._supply["Gold"] = generateN(Gold, 30);
 
-    this._supply["Curse"] = Array((this._players.length - 1)*10).fill(new Curse());
+    this._supply["Curse"] = generateN(Curse, (this._players.length - 1)*10);
 
     // Add kingdom cards
     if (!kingdomCards) {
@@ -134,7 +142,7 @@ class Game {
     }
 
     for (let k of kingdomCards) {
-      this._supply[k.name] = Array(10).fill(new k());
+      this._supply[k.name] = generateN(k, 10);
     }
 
     this._players.shuffle();
@@ -263,7 +271,7 @@ class Player {
     }
     this._name = name; // String
 
-    let cards = Array(7).fill(new Copper()).concat(Array(3).fill(new Estate()));
+    let cards = generateN(Copper, 7).concat(generateN(Estate, 3));
     cards.shuffle();
 
     this._deck = cards.slice(0,5); // Array<Card>
@@ -450,11 +458,13 @@ class Chapel extends Card {
   async play(player, game) {
     await super.play(player, game);
 
+    // Trash up to 4 cards from your hand.
+
     let choices = player._hand;
     let choice = await game.choose(player, choices, 0, 4);
 
     for (let card of choice) {
-      player._hand = player._hand.filter( card => card != this);
+      player._hand = player._hand.filter(c => !Object.is(c,card));
       game._trash.push(card);
     }
   }
