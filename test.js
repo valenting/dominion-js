@@ -4,6 +4,7 @@ const seedrandom = require('seedrandom');
 const Assert = require("assert");
 
 async function simpleGame2Players() {
+  seedrandom('hello.', { global: true });
   let g = new Game();
   await g.addPlayer("Alice");
   await g.addPlayer("Bob");
@@ -12,6 +13,7 @@ async function simpleGame2Players() {
 }
 
 async function simpleGame4Players() {
+  seedrandom('hello.', { global: true });
   let g = new Game();
   await g.addPlayer("Alice");
   await g.addPlayer("Bob");
@@ -37,7 +39,6 @@ describe("Setup", function() {
 
 describe("Buy stage", function() {
   it("Buy Cellar", async () => {
-    seedrandom('hello.', { global: true });
     let g = await simpleGame2Players();
     g._activePlayer = g._players[0];
     let round = g.playRound();
@@ -49,7 +50,6 @@ describe("Buy stage", function() {
   });
 
   it("Buy Silver", async () => {
-    seedrandom('hello.', { global: true });
     let g = await simpleGame2Players();
     g._activePlayer = g._players[0];
     let round = g.playRound();
@@ -63,7 +63,6 @@ describe("Buy stage", function() {
 
 describe("Cellar", function() {
   it("Play Cellar", async () => {
-    seedrandom('hello.', { global: true });
     let g = await simpleGame2Players();
     let p = g._players[0];
     g._activePlayer = p;
@@ -85,10 +84,8 @@ describe("Cellar", function() {
   });
 });
 
-
 describe("Chapel", function() {
   it("Play Chapel", async () => {
-    seedrandom('hello.', { global: true });
     let g = await simpleGame2Players();
     let p = g._players[0];
     g._activePlayer = p;
@@ -112,7 +109,6 @@ describe("Chapel", function() {
 
 describe("Gardens", function() {
   it("Count gardens VP", async () => {
-    seedrandom('hello.', { global: true });
     let g = await simpleGame2Players();
     let p = await g.countPoints();
     console.log(p);
@@ -128,7 +124,6 @@ describe("Gardens", function() {
 
 describe("Bureaucrat", function() {
   it("Play bureaucrat", async () => {
-    seedrandom('hello.', { global: true });
     let g = await simpleGame4Players();
     let denise = g._players[0];
     g._players[1]._hand.push(new Cards.Moat());
@@ -158,7 +153,6 @@ describe("Bureaucrat", function() {
 
 describe("Merchant", function() {
   it("Play merchant", async () => {
-    seedrandom('hello.', { global: true });
     let g = await simpleGame4Players();
     let denise = g._players[0];
     g._players[1]._hand.push(new Cards.Moat());
@@ -185,3 +179,17 @@ describe("Merchant", function() {
     await playBureaucrat;
   });
 });
+
+describe("Moat", function() {
+  it("Play Moat", async () => {
+    let g = await simpleGame2Players();
+    let moat = new Cards.Moat();
+    let p = g._players[0];
+    p._hand.push(moat);
+    Assert.equal(p._hand.length, 6);
+    await moat.play(p, g);
+    // play moat, draw 2
+    Assert.equal(p._hand.length, 7);
+  });
+});
+
