@@ -506,11 +506,10 @@ class Harbinger extends Card {
     player._actions += 1;
 
     let choices = player._discard;
-    let choice = await game.choose(player, choices, 0, 1);
-    if (choice.length == 0) {
+    let [card] = await game.choose(player, choices, 0, 1);
+    if (!card) {
       return;
     }
-    let card = choice[0];
     player._discard = player._discard.filter(c => c != card);
     player._deck.push(card);
   }
