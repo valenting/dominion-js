@@ -193,3 +193,39 @@ describe("Moat", function() {
   });
 });
 
+describe("Harbinger", function() {
+  it("Play Harbinger Empty", async () => {
+    let g = await simpleGame2Players();
+    let harbinger = new Cards.Harbinger();
+    let p = g._players[0];
+    p._hand.push(harbinger);
+    Assert.equal(p._hand.length, 6);
+    Assert.equal(p._discard.length, 0);
+    await harbinger.play(p, g);
+    Assert.equal(p._hand.length, 6);
+    Assert.equal(g._activeChoice, null); // No cards in hand. Nothing to choose
+  });
+  it("Play Harbinger Choose", async () => {
+    let g = await simpleGame2Players();
+    let harbinger = new Cards.Harbinger();
+    let p = g._players[0];
+    p._hand.push(harbinger);
+    Assert.equal(p._hand.length, 6);
+    Assert.equal(p._discard.length, 0);
+    p._discard.push(new Cards.Copper());
+    p._discard.push(new Cards.Gold());
+    Assert.equal(p._deck.length, 5);
+    let action = harbinger.play(p, g);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    Assert.equal(p._hand.length, 6);
+    Assert.equal(p._deck.length, 4);
+    Assert.notEqual(g._activeChoice, null);
+    Assert.equal(g._activeChoice.options.length, 2);
+    await g.decideOption([1]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    Assert.equal(p._deck.length, 5);
+    Assert.equal(p._discard.length, 1);
+    await action;
+  });
+});
+
